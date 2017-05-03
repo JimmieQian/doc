@@ -379,13 +379,9 @@ tags: appium,json
 ```json
 // 处理特出对话框(xpath)
   "alter / permissionAlter": [
-    // 关闭引导
     "//*[@resource-id='com.m4399.youpai:id/btn_close_guide' and @class='android.widget.Button']",
-    // 关闭关闭按钮
     "//*[@resource-id='com.m4399.youpai:id/btn_close' and @class='android.widget.Button']",
-    // 关闭取消按钮
     "//*[@resource-id='com.m4399.youpai:id/btn_cancel' and @class='android.widget.Button']",
-    // 取消新版本更新
     "//*[@resource-id='com.m4399.youpai:id/tv_close' and @class='android.widget.ImageButton']"
   ],
 ```
@@ -403,18 +399,15 @@ tags: appium,json
 ```json
   // 黑名单控件
   "black": [
-    // 搜索框
     {
       "cls": "android.widget.RelativeLayout",
       "id": "com.m4399.youpai:id/rl_take_photo",
       "text": ""
     },
-    // 返回按钮
     {
       "cls": "android.widget.ImageButton",
       "id": "com.m4399.youpai:id/btn_back"
     },
-    // 输入框
     {
       "cls": "android.widget.EditText"
     }
@@ -521,8 +514,11 @@ tags: appium,json
 
 
 **chain,reEnter区别**
+
 `chain` 表示初次进入的路径链
+
 `reEnter` 表示再次进入的路径链
+
 这么做的目的是为了 适应 类似游拍主播,第一次配置,和再次进入的路径不一致的情况
 如果 初次进入和再次进入的路径时一致的,则 不需要再配置 `reEnter` 关键字了.
 
