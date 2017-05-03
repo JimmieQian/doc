@@ -272,6 +272,7 @@ tags: appium,json
 **duration** | 整型 | (单位秒) 遍历的最长时间 (建议设置大于5分钟) | (选填) 时间从appium与手机建立起连接时开始算起,<br >如果未填,默认不限制时间,这个时间存在误差(+60s);
 **timeout** | 整型 | (单位秒) appium服务找寻控件的最长时间 | (选填) 不填时,默认3秒
 **interval** | 整型 | (单位秒) 每次操作的间隔(等待)时间 | (选填) 不填时,默认3秒
+---
 
 ### 引导功能
 引导的关键字是  `guide` , 它是一个json 数组 , 使用 `[ ]` 框起来
@@ -280,16 +281,11 @@ tags: appium,json
  // 首次进入的引导,使其进入应用主页
   "guide": [
     {
-      // 动作类型 如: click / input / slide / slideHori / check
       "action": "slideHori",
-      // 唯一路径
       "xpath": "//*[@resource-id='com.m4399.gamecenter.plugin.main:id/tv_enter_right_now']"
-      // input类型需要填写数值
     },
     {
-      // 动作类型 如: click / input / slide / slideHori / check
       "action": "check",
-      // 唯一路径
       "xpath": "//*[@resource-id='com.m4399.gamecenter.plugin.main:id/iv_tab_icon']"
     }
   ]
