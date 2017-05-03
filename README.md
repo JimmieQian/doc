@@ -311,7 +311,8 @@ tags: appium,json
 **enableAlter** | 布尔值 | 允许配置路径,自己处理对话框 | true : 表示配置自己处理
 **errorMessage** | 字符串 | 当路径出错时,自定义的提示语
 
-**action**字段详解:
+**action**字段详解 :
+
 类型 | 说明 |备注
 ---|---|---
 **click** | 点击操作 | 需要配置 `xpath`
