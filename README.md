@@ -320,10 +320,46 @@ tags: appium,json
 **check** | 检查 | 需要配置 `xpath`  <br /> 表示控件是否存在,存在返回真,不存在返回假<br /> `errorMessage`在此类型下无效
 
 > *注释* : `guide` 配置,需要在最后一项, 使用 `check` 类型, 检查的元素是跳过引导页之后的首页元素,
-> 这么做是为了判断,引导是否已经完成,并且二次进入是,只要检测到这个元素,就不需要进行引导
-> 也为了适应,非首次进入 不需要引导操作的流程
+> 
+> 这么做是因为 非首次进入应用,是不需要做引导操作 , 即检测到首页元素,则不再进行引导操作
 
 ---
 
 ### 登录功能
+
+登录功能包含三个关键字 `login` (登录),`loginCheck`(登录检查),`logout`(注销)
+
+登录逻辑 :
+1. 先 `loginCheck` 检查用户是否登录
+2. 用户已经登录,则 `logout` 注销 , 注销后 `login` 登录到指定账号
+3. 用户未登录,则 直接 `login` 登录到指定账号
+
+三个关键字的结构都一样, 外层是一个 json数组 `[ ]`,每一个子项的操作是一个json格式 `{ }`
+```json
+  "logout / login / loginCheck": [
+    {
+      "action": "click",
+      "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_mine']"
+    },
+    {
+      "action": "slide",
+      "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_setting']"
+    },
+    {
+      "action": "click",
+      "xpath": "//*[@resource-id='com.m4399.youpai:id/bt_out']"
+    }
+  ]
+```
+**每个操作的关键字与 上述 引导 `guide` 类型的操作一致**
+
+> *注释* :  `loginCheck` 关键字,最后一项,是查查登录后的某个ID,是否存在,
+> 
+> 存在,则表示已经登录了; 不存在,表示还未登录,
+>
+> 所以  `loginCheck` 的最后一项 应该为 `check` 类型
+
+---
+
+### 对话框处理
 
