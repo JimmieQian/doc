@@ -265,6 +265,7 @@ tags: appium,json
 **packageName** | 字符串 | 被测应用的包名 | (选填) 该值未填,则不会检测手机上是否安装被测应用,会直接安装传入的apk路径包
 **launchActivity** | 字符串 | 被测应用的入口activity名 | (选填)  该值未填,则不会检测手机上是否安装被测应用,会直接安装传入的apk路径包
 **capability** | map | appium服务关键字 | (选填) 支持所有的appium服务关键字 [Appium 服务关键字](http://appium.io/slate/cn/master/?ruby#appium-服务关键字)
+**uselessActivity** | 字符数组 | 不需要关注的activity页面 | 该项主要目的是用于数据统计,与遍历功能无关
 
 ### 全局字段
 参数名 | 类型 | 说明 | 备注
@@ -362,4 +363,169 @@ tags: appium,json
 ---
 
 ### 对话框处理
+
+对话框 包含两个关键字 `alter` , `permissionAlter`
+
+> 对话框的处理逻辑 是每次控件操作之前 都会检查 当前页面是否存在 对话框,
+>
+> 如果存在,则会处理掉
+
+`alter` , `permissionAlter` 都是字符数组.
+
+**alter, permissionAlter 的区别**
+`permissionAlter` 一次操作能处理连续弹出的对话框,所以它适合权限对话框,这种可能出现连续多次弹窗的情况
+`alter` 一次操作只处理一个对话框
+
+```json
+// 处理特出对话框(xpath)
+  "alter / permissionAlter": [
+    // 关闭引导
+    "//*[@resource-id='com.m4399.youpai:id/btn_close_guide' and @class='android.widget.Button']",
+    // 关闭关闭按钮
+    "//*[@resource-id='com.m4399.youpai:id/btn_close' and @class='android.widget.Button']",
+    // 关闭取消按钮
+    "//*[@resource-id='com.m4399.youpai:id/btn_cancel' and @class='android.widget.Button']",
+    // 取消新版本更新
+    "//*[@resource-id='com.m4399.youpai:id/tv_close' and @class='android.widget.ImageButton']"
+  ],
+```
+
+> 对话框数组的每一项,是唯一标识对话框按钮的 XPath 数据
+
+---
+
+### 黑名单功能
+
+黑名单表示 自动遍历过程中,不对这些元素进行操作和遍历
+包含一个关键字 `black`
+黑名单是一个 json数组,里面的每一项是一个 json数据
+
+```json
+  // 黑名单控件
+  "black": [
+    // 搜索框
+    {
+      "cls": "android.widget.RelativeLayout",
+      "id": "com.m4399.youpai:id/rl_take_photo",
+      "text": ""
+    },
+    // 返回按钮
+    {
+      "cls": "android.widget.ImageButton",
+      "id": "com.m4399.youpai:id/btn_back"
+    },
+    // 输入框
+    {
+      "cls": "android.widget.EditText"
+    }
+  ],
+```
+
+**字段详解 :**
+类型 | 说明
+---|---
+**cls** | 对应uiautomator的 class 属性
+**id** | 对应uiautomator的 resource-id 属性
+**text** | 对应uiautomator的 text 属性
+
+> 三个属性是并且的关系
+
+### before / after
+
+`before` 关键字是用于在遍历开始之前,登录之后执行的操作
+
+`after` 关键字是用于在遍历结束后,报告完成之前执行的操作
+
+```json
+  "before / after": [
+    {
+      "chain": [
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/tv_mine']",
+          "loopTimes": 5,
+          "timeSpacing": 1000,
+          "errorMessage": "点击我的"
+        },
+        {
+          "action": "input",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/rl_video_title' ]",
+          "value": "youpai123",
+          "errorMessage": "输入视频标题"
+        },
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/tv_game_category_mobile']",
+          "errorMessage": "选择视频分类"
+        },
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_upload_video' ]",
+          "errorMessage": "点击立即上传"
+        }
+      ],
+      "reEnter": [
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/tv_mine']",
+          "loopTimes": 5,
+          "timeSpacing": 1000,
+          "errorMessage": "点击我的"
+        },
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/tv_game_name' ]",
+          "errorMessage": "点击王者荣耀"
+        },
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_upload_video' ]",
+          "errorMessage": "点击立即上传"
+        }
+      ],
+      "needFinish": true
+    }
+  ]
+```
+`before`,`after` 的数据结构相同. 都是json 数组,
+里面的每一项 都是一个用例(json数据) 
+
+```json
+    {
+      "chain": [
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_upload_video' ]",
+          "errorMessage": "点击立即上传"
+        }
+      ],
+      "reEnter": [
+        {
+          "action": "click",
+          "xpath": "//*[@resource-id='com.m4399.youpai:id/btn_upload_video' ]",
+          "errorMessage": "点击立即上传"
+        }
+      ],
+      "needFinish": true
+    }
+```
+
+**字段详解:**
+参数 | 类型 | 说明 | 备注
+---|---|---|---
+**chain** | json数组 | 首次进入的路径链 | 类似引导,和登录所配置的操作链
+**reEnter** |json数组 | 再次进入的路径链 | 类似引导,和登录所配置的操作链
+**needFinish** | 布尔值 | 路径走完是否直接结束该用例,不对产生的新页面进行遍历 |true:结束
+
+**chain,reEnter区别**
+`chain` 表示初次进入的路径链
+`reEnter` 表示再次进入的路径链
+这么做的目的是为了 适应 类似游拍主播,第一次配置,和再次进入的路径不一致的情况
+如果 初次进入和再次进入的路径时一致的,则 不需要再配置 `reEnter` 关键字了.
+
+
+
+
+
+
 
