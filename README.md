@@ -274,5 +274,49 @@ tags: appium,json
 **interval** | 整型 | (单位秒) 每次操作的间隔(等待)时间 | (选填) 不填时,默认3秒
 
 ### 引导功能
-引导的关键字是 ==guide== , 它是一个json 数组 , 使用 `[ ]` 框起来
+引导的关键字是  `guide` , 它是一个json 数组 , 使用 `[ ]` 框起来
 数组的每一项, 是一个json格式的数据 , 使用 `{}` 框起来
+```json
+ // 首次进入的引导,使其进入应用主页
+  "guide": [
+    {
+      // 动作类型 如: click / input / slide / slideHori / check
+      "action": "slideHori",
+      // 唯一路径
+      "xpath": "//*[@resource-id='com.m4399.gamecenter.plugin.main:id/tv_enter_right_now']"
+      // input类型需要填写数值
+    },
+    {
+      // 动作类型 如: click / input / slide / slideHori / check
+      "action": "check",
+      // 唯一路径
+      "xpath": "//*[@resource-id='com.m4399.gamecenter.plugin.main:id/iv_tab_icon']"
+    }
+  ]
+```
+除了上诉示例中,提到的 `action`,`xpath` 关键字外,还有 `hint`,`value`,`loopTimes`,`timeSpacing`,`errorMessage`,`enableAlter`
+
+#### 字段详解
+
+>  这些关键字只适用于 配置中的用例,不适用于 程序的默认遍历
+
+参数名 | 类型 | 说明 | 备注
+---|---|---|---
+**action** | 字符串 | 动作类型 (必填) | 目前支持 `click`,`input`,`slide`,`slideHori`,`check`五种类型 <br /> 详情见下一张表格
+**xpath** | 字符串 | 控件的唯一路径标识(必填) | 需要遵循 XML 中的 XPath 语法 <br /> 该路径出错则元素无法找到
+**hint** | 字符串 | 输入框的提示语 | (只用于input类型)用于判断 输入框是否已经被清空
+**value** | 字符串 | 输入的文字内容 | (只用于input类型)
+**loopTimes** | 整型 | 寻找控件的循环次数 | 未填写,则默认值1
+**timeSpacing** | 整型 | (单位毫秒) 找寻控件的间隔时间 | 需要配合 **loopTimes**使用
+**enableAlter** | 布尔值 | 允许配置路径,自己处理对话框 | true : 表示配置自己处理
+**errorMessage** | 字符串 | 当路径出错时,自定义的提示语
+
+**action**字段详解:
+类型 | 说明 |备注
+---|---|---
+**click** | 点击操作 | 需要配置 `xpath`
+**input** | 输入操作 | 需要配置 `xpath`,`hint` ,`value`
+**slide** | 滑动 (上下滑动寻找控件) | 需要配置 `xpath` <br /> `loopTimes` 在这个动作下表示滑动次数
+**slideHori** | 左右滑动 | 需要配置 `xpath` <br /> `loopTimes` 在这个动作下表示滑动次数
+**check** | 检查 | 需要配置 `xpath`  <br /> 表示控件是否存在,存在返回真,不存在返回假<br /> `errorMessage`在此类型下无效
+
