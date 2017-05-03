@@ -524,7 +524,34 @@ tags: appium,json
 这么做的目的是为了 适应 类似游拍主播,第一次配置,和再次进入的路径不一致的情况
 如果 初次进入和再次进入的路径时一致的,则 不需要再配置 `reEnter` 关键字了.
 
+---
 
+## 命令行详解
+
+```bash
+java -jar autotest-2017.5.3.17.23.jar -h
+usage: help information
+: if none option , can't run this script
+: option allow unordered
+
+ -a,--apk <.apk>                        use given apk path for running
+ -c,--config <(must) .json>             use given json file to
+                                        configuration
+ -h,--help                              print help information
+ -u,--udid <adb devices for deviceId>   input deviceId, support multi
+                                        options
+ -v,--version                           check version !
+
+example :
+java -jar autotraveller -c E:\config.json
+java -jar autotraveller -c E:\config.json -a E:\test.apk
+```
+
+1. `-a` (可选)传入apk路径, 会覆盖 **config.json** 配置文件中 `apkPath` 的值
+2. `-c` (必填)配置文件的路径, 配置文件路径错误,或者配置文件错误,会导致程序运行不起来
+3. `-u` (可选)选择设备进行遍历, `-u` 后面的值 是 `adb devices` 的值, <br > 如果需要选定多设备 则使用多个 `-u` 选项
+4. `-v` 查看遍历程序的版本号
+5. `-h` 查看命令行帮助文档
 
 
 
