@@ -423,6 +423,8 @@ tags: appium,json
 
 > 三个属性是并且的关系
 
+---
+
 ### before / after
 
 `before` 关键字是用于在遍历开始之前,登录之后执行的操作
